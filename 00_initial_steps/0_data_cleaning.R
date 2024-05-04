@@ -26,21 +26,6 @@ air_bnb_data |>
   arrange(-n) |>
   view()
 
-# Target variable distribution
-air_bnb_data |>
-  ggplot(aes (x = price) ) +
-  geomline() +
-  labs (y = "Count" , x = "Superhost Status") +
-  theme_classic() + theme (legend.position = "none") +
-  scale_fill_manual(values = c("darkgreen", "green"))
-
-# Check correlations-----------
-cor_matrix <- air_bnb_data |>
-  select (where(is.numeric) | where(is.logical)) |>
-  na.omit() |> 
-  cor() |>
-  as_tibble( )
-
 # training data tidy-----
 training_data <- air_bnb_data |>
   mutate(
@@ -50,16 +35,6 @@ training_data <- air_bnb_data |>
     host_verifications = factor(host_verifications),
     neighbourhood_cleansed = factor(neighbourhood_cleansed),
     property_type = factor(property_type),
-    host_is_superhost = factor(if_else(host_is_superhost == TRUE, 1, 0),
-                               levels = c(0, 1), ordered = TRUE),
-    host_identity_verified = factor(if_else(host_identity_verified == TRUE, 1, 0),
-                                    levels = c(1, 0), ordered = TRUE), 
-    host_has_profile_pic = factor(if_else(host_has_profile_pic == TRUE, 1, 0),
-                                 levels = c(1, 0), ordered = TRUE),
-    has_availability = factor(if_else(has_availability == TRUE, 1, 0),
-                        levels = c(0, 1), ordered = TRUE),
-    instant_bookable = factor(if_else(instant_bookable == TRUE, 1, 0),
-                              levels = c(0, 1), ordered = TRUE),
     
     ### managing numbers ------
     host_response_rate = as.numeric(sub("%", "", host_response_rate)),
@@ -75,33 +50,25 @@ training_data <- air_bnb_data |>
     first_review = year(first_review),
     first_review_year = factor(first_review - 0)) |>
   
-  select(-c(price))
+  select(-c(bathrooms_text, host_neighbourhood, host_since, last_review, first_review, host_location))
 
 # testing data tidy-------
 testing_data <- air_bnb_test_data |>
-  mutate(host_acceptance_rate = as.numeric (sub("%","", host_acceptance_rate)),
-         room_type = factor (room_type),
+  mutate(host_acceptance_rate = as.numeric(sub("%","", host_acceptance_rate)),
+         room_type = factor(room_type),
          property_type = factor (property_type),
-         neighbourhood_cleansed = factor (neighbourhood_cleansed),
-         bathrooms = if_else(str_detect (bathrooms_text, "alf"), 0.5, parse_number (bathrooms_text)),
+         neighbourhood_cleansed = factor(neighbourhood_cleansed),
+         bathrooms = if_else(str_detect(bathrooms_text, "alf"), 0.5, parse_number (bathrooms_text)),
          host_since = year (host_since),
          host_verifications = factor(host_verifications),
-         host_response_time = factor (host_response_time),
+         host_response_time = factor(host_response_time),
          host_response_rate = as.numeric(sub("%", "", host_response_rate)),
-         host_identity_verified = factor(if_else(host_identity_verified == TRUE, 1, 0),
-                                         levels = c(1, 0), ordered = TRUE), 
-         host_has_profile_pic = factor(if_else(host_has_profile_pic == TRUE, 1, 0),
-                                       levels = c(1, 0), ordered = TRUE),
-         has_availability = factor(if_else(has_availability == TRUE, 1, 0),
-                                   levels = c(0, 1), ordered = TRUE),
-         instant_bookable = factor(if_else(instant_bookable == TRUE, 1, 0),
-                                   levels = c(0, 1), ordered = TRUE),
-         host_is_superhost = factor(if_else(host_is_superhost == TRUE, 1, 0),
-                                    levels = c(0, 1), ordered = TRUE),
          year_since = factor (host_since - 0),
          last_review = year (last_review),
          first_review = year(first_review),
-         first_review_year = factor(first_review - 0)) 
+         first_review_year = factor(first_review - 0)) |>
+
+  select(-c(bathrooms_text, host_neighbourhood, host_since, last_review, first_review, host_location))
 
 # Save out Cleaned Data
 save(training_data, file = here("data/training_data.rda"))

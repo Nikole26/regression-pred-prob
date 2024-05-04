@@ -14,9 +14,11 @@ load(here("data/training_data.rda"))
 
 # Recipe
 recipe_1 <- recipe(price ~ ., data = training_data) |>
+  step_rm(host_verifications, host_response_time, host_response_rate, host_has_profile_pic, last_review_year) |>
   step_impute_mean(all_numeric_predictors()) |>
   step_impute_mode(all_nominal_predictors()) |>
-  step_nzv(all_numeric_predictors()) |>
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) |>
+  step_nzv(all_predictors()) |>
   step_normalize(all_numeric_predictors())
 
 recipe_1 |>
