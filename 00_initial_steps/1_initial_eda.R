@@ -11,14 +11,13 @@ load(here("data/testing_data.rda"))
 
 skimr::skim_without_charts(training_data)
 
+# 
 
 # Target variable distribution
-air_bnb_data |>
-  ggplot(aes (x = price) ) +
-  geomline() +
-  labs (y = "Count" , x = "Superhost Status") +
-  theme_classic() + theme (legend.position = "none") +
-  scale_fill_manual(values = c("darkgreen", "green"))
+ggplot(data = your_data, aes(y = price)) +
+  geom_boxplot() +
+  ylab("Price") +
+  ggtitle("Box Plot of Price Distribution")
 
 # Check correlations-----------
 cor_matrix <- air_bnb_data |>
