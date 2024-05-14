@@ -9,9 +9,9 @@ library(here)
 tidymodels_prefer()
 
 # load tune models ----
-load(here("01_attempt/results/knn_tune_1.rda"))
-load(here("01_attempt/results/bt_tune_1.rda"))
-load(here("01_attempt/results/rf_tune_1.rda"))
+load(here("02_attempt/results/knn_tune_1.rda"))
+load(here("02_attempt/results/bt_tune_1.rda"))
+load(here("02_attempt/results/rf_tune_1.rda"))
 
 # Select the best hyperparameters for random forest
 # For rf model

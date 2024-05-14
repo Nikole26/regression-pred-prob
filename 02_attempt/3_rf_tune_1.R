@@ -16,7 +16,7 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("02_attempt/data_splits/air_bnb_folds.rda"))
+load(here("02_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
 load(here("02_attempt/recipes/recipe_1.rda"))
@@ -35,7 +35,7 @@ rf_model <-
 rf_wflow <- 
   workflow() |>
   add_model(rf_model) |>
-  add_recipe(recipe_2)
+  add_recipe(recipe_1)
 
 # hyperparameter tuning values ----
 # check ranges for hyperparameters
@@ -45,7 +45,7 @@ hardhat::extract_parameter_set_dials(rf_model)
 rf_params <- parameters(rf_model) %>% 
   # N:= maximum number of random predictor columns we want to try 
   # should be less than the number of available columns
-  update(mtry = mtry(c(1, 10))) 
+  update(mtry = mtry(c(5, 15))) 
 
 # build tuning grid
 rf_grid <- grid_regular(rf_params, levels = 5)

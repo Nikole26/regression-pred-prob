@@ -16,7 +16,7 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("01_attempt/data_splits/air_bnb_folds.rda"))
+load(here("01_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
 load(here("01_attempt/recipes/recipe_1.rda"))
@@ -44,7 +44,7 @@ knn_params <- parameters(knn_model) |>
 knn_grid <- grid_regular(knn_params, levels = 5)
 
 # fit workflows/models ----
-set.seed(7026)
+set.seed(1723)
 knn_tune_1 <- tune_grid(knn_wflow,
                        air_bnb_folds,
                        grid = knn_grid,

@@ -16,10 +16,10 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("01_attempt/data_splits/air_bnb_folds.rda"))
+load(here("02_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("01_attempt/recipes/recipe_1.rda"))
+load(here("02_attempt/recipes/recipe_1.rda"))
 
 # model specifications ----
 bt_model <- boost_tree(mode = "regression", 
@@ -46,7 +46,7 @@ bt_grid <- grid_regular(bt_params, levels = 5)
 
 # fit workflows/models ----
 #set seed
-set.seed(7120)
+set.seed(1765)
 bt_tune_1 <- tune_grid(bt_wflow,
                       air_bnb_folds,
                       grid = bt_grid,

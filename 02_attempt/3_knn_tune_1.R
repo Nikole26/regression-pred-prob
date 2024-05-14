@@ -16,10 +16,10 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("01_attempt/data_splits/air_bnb_folds.rda"))
+load(here("02_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("01_attempt/recipes/recipe_1.rda"))
+load(here("02_attempt/recipes/recipe_1.rda"))
 
 # model specifications ----
 knn_model <-
@@ -52,4 +52,4 @@ knn_tune_1 <- tune_grid(knn_wflow,
                        control = control_grid(save_workflow = TRUE))
 
 # write out results (fitted/trained workflows) ----
-save(knn_tune_1, file = here("01_attempt/results/knn_tune_1.rda"))
+save(knn_tune_1, file = here("02_attempt/results/knn_tune_1.rda"))
