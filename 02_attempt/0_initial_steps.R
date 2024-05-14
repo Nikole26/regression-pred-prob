@@ -75,5 +75,5 @@ testing_data <- air_bnb_test_data |>
 
 
 # Save out Cleaned Data
-save(training_data, file = here("01_attempt/data/training_data.rda"))
-save(testing_data, file = here("01_attempt/data/testing_data.rda"))
+save(training_data, file = here("02_attempt/data/training_data.rda"))
+save(testing_data, file = here("02_attempt/data/testing_data.rda"))
