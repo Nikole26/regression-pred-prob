@@ -35,11 +35,29 @@ recipe_2 <- recipe(log_price ~ ., data = training_data) |>
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |>
   step_nzv(all_predictors()) |>
   step_normalize(all_numeric_predictors()) 
+
+# Recipe 3
+recipe_3 <- recipe(log_price ~ ., data = training_data) |>
+  step_mutate(
+    host_listings_ratio = ifelse(host_total_listings_count != 0, host_listings_count / host_total_listings_count, 0)
+  ) |>
+  step_rm(
+    id, host_has_profile_pic, property_type, host_has_profile_pic,
+    host_identity_verified, has_availability, instant_bookable,
+    host_listings_count, host_total_listings_count,
+    host_response_time, host_verifications, last_review_year
+  ) |>
+  step_impute_mean(all_numeric_predictors()) |>
+  step_impute_mode(all_nominal_predictors()) |>
+  step_dummy(all_nominal_predictors(), one_hot = TRUE) |>
+  step_nzv(all_predictors()) |>
+  step_normalize(all_numeric_predictors())
   
-recipe_2 |>
+recipe_3 |>
   prep() |>
 bake(new_data = NULL) |>
   glimpse()
 
 save(recipe_1, file = here("02_attempt/recipes/recipe_1.rda"))
 save(recipe_2, file = here("02_attempt/recipes/recipe_2.rda"))
+save(recipe_3, file = here("02_attempt/recipes/recipe_3.rda"))
