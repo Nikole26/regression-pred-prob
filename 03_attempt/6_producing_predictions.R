@@ -7,13 +7,13 @@ library(tidymodels)
 library(here)
 
 # loading necessary data
-load(here("02_attempt/data/testing_data.rda"))
-load(here("02_attempt/results/final_fit.rda"))
+load(here("03_attempt/data/testing_data.rda"))
+load(here("03_attempt/results/final_fit.rda"))
 
 # producing predictions
-attempt_02_rf_01 <- testing_data |>
+attempt_03_rf_02 <- testing_data |>
   bind_cols(predict(final_fit, testing_data)) |>
   mutate(predicted = 10^.pred) |>
   select(id, predicted) 
 
-write_csv(attempt_02_rf_01, here("submissions/attempt_02_rf_01.csv"))
+write_csv(attempt_03_rf_02, here("submissions/attempt_03_rf_02.csv"))
