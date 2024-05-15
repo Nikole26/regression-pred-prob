@@ -31,7 +31,7 @@ model_results <- as_workflow_set(
   bt = bt_tune_1
 )
 
-models_table <- model_results |>
+models_table_1 <- model_results |>
   collect_metrics() |>
   filter(.metric == "mae") |>
   slice_min(mean, by = wflow_id) |>
