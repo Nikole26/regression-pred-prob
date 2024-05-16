@@ -32,12 +32,6 @@ training_data <- air_bnb_data |>
     price = as.numeric(gsub("[$,]", "", price)),
     log_price = log10(price),
     
-    ### eliminating logicals -----
-    #host_has_profile_pic = factor(host_has_profile_pic, levels = c(1, 0)),
-    #host_identity_verified = factor(host_identity_verified, levels = c(1, 0)), 
-    #has_availability = factor(has_availability, levels = c(1, 0)),
-    #instant_bookable = factor (instant_bookable, levels = c(1, 0)),
-    
     ### managing dates -----
     host_since = year(host_since),
     year_since = factor(host_since - 0),
@@ -59,11 +53,7 @@ testing_data <- air_bnb_test_data |>
          property_type = factor (property_type),
          host_response_rate = as.numeric(sub("%", "", host_response_rate)),
          host_acceptance_rate = as.numeric(sub("%","", host_acceptance_rate)),
-         bathrooms = if_else(str_detect (bathrooms_text, "alf"), 0.5, parse_number (bathrooms_text)),
-         #host_has_profile_pic = factor (host_has_profile_pic, levels = c(1, 0)),
-         #host_identity_verified = factor(host_identity_verified, levels = c(1, 0)),
-         #has_availability = factor(has_availability, levels = c(1, 0)),
-         #instant_bookable = factor(instant_bookable, levels = c(1, 0)),
+         bathrooms = if_else(str_detect(bathrooms_text, "alf"), 0.5, parse_number(bathrooms_text)),
          host_since = year(host_since),
          year_since = factor(host_since - 0),
          last_review = year(last_review),
