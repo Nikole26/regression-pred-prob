@@ -14,13 +14,13 @@ tidymodels_prefer()
 
 # parallel processing ----
 num.cores <- detectCores(logical = TRUE)
-registerDoParallel(cores = num.cores/4)
+registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("04_attempt/data/air_bnb_folds.rda"))
+load(here("05_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("04_attempt/recipes/recipe_trees_1.rda"))
+load(here("05_attempt/recipes/recipe_1.rda"))
 
 # model specifications ----
 bt_model <- boost_tree(mode = "regression", 
@@ -33,21 +33,22 @@ bt_model <- boost_tree(mode = "regression",
 bt_wflow <- 
   workflow() |>
   add_model(bt_model) |>
-  add_recipe(recipe_trees_1)
+  add_recipe(recipe_1)
 
 # hyperparameter tuning values ----
 # check ranges for hyperparameters
 hardhat::extract_parameter_set_dials(bt_model)
 # change hyperparameter ranges
 bt_params <- parameters(bt_model) |>
-  update(mtry = mtry(c(1, 10)), 
-         learn_rate = learn_rate(c(-5, -0.2))) 
+  update(mtry = mtry(c(10, 25)), 
+         min_n = min_n(c(15, 30)),
+         learn_rate = learn_rate(c(-1, 1))) 
 # build tuning grid
 bt_grid <- grid_regular(bt_params, levels = 5)
 
 # fit workflows/models ----
 #set seed
-set.seed(112)
+set.seed(145)
 bt_tune_1 <- tune_grid(bt_wflow,
                       air_bnb_folds,
                       grid = bt_grid,
@@ -55,4 +56,4 @@ bt_tune_1 <- tune_grid(bt_wflow,
                       control = control_grid(save_workflow = TRUE))
 
 # write out results (fitted/trained workflows) ----
-save(bt_tune_1, file = here("04_attempt/results/bt_tune_1.rda"))
+save(bt_tune_1, file = here("05_attempt/results/bt_tune_1.rda"))

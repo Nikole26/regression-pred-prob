@@ -10,8 +10,8 @@ tidymodels_prefer()
 
 # load tune models ----
 #load(here("03_attempt/results/knn_tune_1.rda"))
-load(here("04_attempt/results/bt_tune_1.rda"))
-load(here("04_attempt/results/rf_tune_1.rda"))
+load(here("05_attempt/results/bt_tune_1.rda"))
+load(here("05_attempt/results/rf_tune_1.rda"))
 
 # Select the best hyperparameters for random forest
 # For rf model
@@ -26,7 +26,6 @@ knn_best <- select_best(knn_tune_1, metric = "mae")
 # Creating table
 # all models results
 model_results <- as_workflow_set(
-  #knn = knn_tune_1,
   rf = rf_tune_1,
   bt = bt_tune_1
 )
