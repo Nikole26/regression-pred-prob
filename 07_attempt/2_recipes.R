@@ -11,14 +11,11 @@ library(recipes)
 tidymodels_prefer()
 
 # loading training data -------
-load(here("06_attempt/data/training_data.rda"))
+load(here("07_attempt/data/training_data.rda"))
 
 # Recipe 1
 recipe_1 <- recipe(log_price ~ ., data = training_data) |>
-  step_rm(id, host_has_profile_pic, property_type, host_has_profile_pic,
-          host_identity_verified, has_availability, instant_bookable,
-          first_review_year, last_review_year, host_verifications, host_response_time,
-          host_response_rate, reviews_per_month, neighbourhood_cleansed) |>
+  step_rm(id) |>
   step_impute_mean(all_numeric_predictors()) |>
   step_impute_mode(all_nominal_predictors()) |>
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |>
@@ -27,10 +24,7 @@ recipe_1 <- recipe(log_price ~ ., data = training_data) |>
 
 # Recipe 2
 recipe_2 <- recipe(log_price ~ ., data = training_data) |>
-  step_rm(id, host_has_profile_pic, property_type, host_has_profile_pic,
-          host_identity_verified, has_availability, instant_bookable,
-          first_review_year, last_review_year, host_verifications, host_response_time,
-          host_response_rate, reviews_per_month, neighbourhood_cleansed) |>
+  step_rm(id) |>
   step_YeoJohnson(all_numeric_predictors()) |>
   step_impute_mode(all_nominal_predictors()) |>
   step_impute_knn(all_predictors()) |>
@@ -45,6 +39,6 @@ recipe_2 |>
   bake(new_data = NULL) |>
   glimpse()
 
-save(recipe_1, file = here("06_attempt/recipes/recipe_1.rda"))
-save(recipe_2, file = here("06_attempt/recipes/recipe_2.rda"))
+save(recipe_1, file = here("07_attempt/recipes/recipe_1.rda"))
+save(recipe_2, file = here("07_attempt/recipes/recipe_2.rda"))
 
