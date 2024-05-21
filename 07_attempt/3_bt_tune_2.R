@@ -17,10 +17,10 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("06_attempt/data/air_bnb_folds.rda"))
+load(here("07_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("06_attempt/recipes/recipe_2.rda"))
+load(here("07_attempt/recipes/recipe_2.rda"))
 
 # model specifications ----
 bt_model <- boost_tree(mode = "regression", 
@@ -56,4 +56,4 @@ bt_tune_2 <- tune_grid(bt_wflow,
                       control = control_grid(save_workflow = TRUE))
 
 # write out results (fitted/trained workflows) ----
-save(bt_tune_2, file = here("06_attempt/results/bt_tune_2.rda"))
+save(bt_tune_2, file = here("07_attempt/results/bt_tune_2.rda"))
