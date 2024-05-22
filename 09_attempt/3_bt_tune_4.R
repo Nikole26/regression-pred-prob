@@ -17,10 +17,10 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("08_attempt/data/air_bnb_folds.rda"))
+load(here("09_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("08_attempt/recipes/recipe_4.rda"))
+load(here("09_attempt/recipes/recipe_4.rda"))
 
 # model specifications ----
 bt_model <- boost_tree(mode = "regression", 
@@ -40,9 +40,9 @@ bt_wflow <-
 hardhat::extract_parameter_set_dials(bt_model)
 # change hyperparameter ranges
 bt_params <- parameters(bt_model) |>
-  update(mtry = mtry(c(5, 22)), 
-         min_n = min_n(c(15, 25)),
-          learn_rate = learn_rate(c(-1, 2))) 
+  update(mtry = mtry(c(15, 30)), 
+         min_n = min_n(c(15, 30)),
+          learn_rate = learn_rate(c(-2, 3))) 
 # build tuning grid
 bt_grid <- grid_regular(bt_params, levels = 5)
 
@@ -56,4 +56,4 @@ bt_tune_4 <- tune_grid(bt_wflow,
                       control = control_grid(save_workflow = TRUE))
 
 # write out results (fitted/trained workflows) ----
-save(bt_tune_4, file = here("08_attempt/results/bt_tune_4.rda"))
+save(bt_tune_4, file = here("09_attempt/results/bt_tune_4.rda"))
