@@ -9,10 +9,10 @@ library(here)
 tidymodels_prefer()
 
 # load tune models ----
-load(here("08_attempt/results/bt_tune_1.rda"))
-load(here("08_attempt/results/bt_tune_2.rda"))
-load(here("08_attempt/results/bt_tune_3.rda"))
-load(here("08_attempt/results/bt_tune_4.rda"))
+load(here("10_attempt/results/bt_tune_1.rda"))
+load(here("10_attempt/results/bt_tune_2.rda"))
+load(here("10_attempt/results/bt_tune_3.rda"))
+load(here("10_attempt/results/bt_tune_4.rda"))
 
 # Creating table
 # all models results
