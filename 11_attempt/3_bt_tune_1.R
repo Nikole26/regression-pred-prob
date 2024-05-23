@@ -41,14 +41,14 @@ hardhat::extract_parameter_set_dials(bt_model)
 # change hyperparameter ranges
 bt_params <- parameters(bt_model) |>
   update(mtry = mtry(c(5, 20)), 
-         min_n = min_n(c(15, 26)),
+         min_n = min_n(c(15, 25)),
           learn_rate = learn_rate(c(-1, 2))) 
 # build tuning grid
 bt_grid <- grid_regular(bt_params, levels = 5)
 
 # fit workflows/models ----
 #set seed
-set.seed(125)
+set.seed(310)
 bt_tune_1 <- tune_grid(bt_wflow,
                       air_bnb_folds,
                       grid = bt_grid,
