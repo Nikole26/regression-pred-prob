@@ -5,6 +5,7 @@ library(tidyverse)
 library(tidymodels)
 library(tictoc)
 library(here)
+library(stacks)
 library(parallel)
 library(doParallel)
 library(bonsai)
@@ -17,10 +18,10 @@ num.cores <- detectCores(logical = TRUE)
 registerDoParallel(cores = num.cores/2)
 
 # load resamples/folds & controls
-load(here("08_attempt/data/air_bnb_folds.rda"))
+load(here("12_attempt/data/air_bnb_folds.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("08_attempt/recipes/recipe_1.rda"))
+load(here("12_attempt/recipes/recipe_1.rda"))
 
 # model specifications ----
 bt_model <- boost_tree(mode = "regression", 
@@ -43,8 +44,12 @@ bt_params <- parameters(bt_model) |>
   update(mtry = mtry(c(5, 22)), 
          min_n = min_n(c(15, 25)),
           learn_rate = learn_rate(c(-1, 2))) 
-# build tuning grid
+
+# define grid
 bt_grid <- grid_regular(bt_params, levels = 5)
+
+# build tuning grid
+ctrl_grid <- control_stack_grid()
 
 # fit workflows/models ----
 #set seed
@@ -53,7 +58,8 @@ bt_tune_1 <- tune_grid(bt_wflow,
                       air_bnb_folds,
                       grid = bt_grid,
                       metrics = metric_set(mae),
-                      control = control_grid(save_workflow = TRUE))
-
+                      control = ctrl_grid
+                      )
+                      
 # write out results (fitted/trained workflows) ----
-save(bt_tune_1, file = here("08_attempt/results/bt_tune_1.rda"))
+save(bt_tune_1, file = here("12_attempt/results/bt_tune_1.rda"))

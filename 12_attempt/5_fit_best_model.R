@@ -8,20 +8,19 @@ library(here)
 library(bonsai)
 
 # loading necessary data
-load(here("08_attempt/results/bt_tune_4.rda"))
-load(here("08_attempt/data/training_data.rda"))
+load(here("12_attempt/results/bt_tune_2.rda"))
+load(here("12_attempt/data/testing_data.rda"))
+load(here("12_attempt/results/air_bnb_final.rda"))
 
-# Best Model --------
-select_best(bt_tune_4, metric = "mae")
+# trained ensemble model
+set.seed(120)
+final_fit <- testing_data |>
+  bind_cols(predict(air_bnb_final, testing_data, members = TRUE)) |>
+  rename(ensemble = .pred)
 
-# finalize workflow for roc-----
-final_wflow <- bt_tune_4 |>
-  extract_workflow(bt_tune_4) |>
-  finalize_workflow(select_best(bt_tune_4, metric = "mae"))
+# predictions
+preds <- wildfires_test |>
+  select(burned) |>
+  bind_cols(predict(wildfires_final, wildfires_test, members = TRUE)) |>
+  rename(ensemble = .pred)
 
-# train final model----
-set.seed(110)
-final_fit <- fit(final_wflow, training_data)
-
-# saving results-------
-save(final_fit, file = here("08_attempt/results/final_fit.rda"))
