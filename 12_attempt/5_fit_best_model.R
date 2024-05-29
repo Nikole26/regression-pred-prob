@@ -18,9 +18,4 @@ final_fit <- testing_data |>
   bind_cols(predict(air_bnb_final, testing_data, members = TRUE)) |>
   rename(ensemble = .pred)
 
-# predictions
-preds <- wildfires_test |>
-  select(burned) |>
-  bind_cols(predict(wildfires_final, wildfires_test, members = TRUE)) |>
-  rename(ensemble = .pred)
 

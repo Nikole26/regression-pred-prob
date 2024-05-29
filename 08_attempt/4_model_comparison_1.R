@@ -23,12 +23,15 @@ model_results <- as_workflow_set(
   bt_4 = bt_tune_4
 )
 
-models_table_1 <- model_results |>
+models_table <- model_results |>
   collect_metrics() |>
   filter(.metric == "mae") |>
   slice_min(mean, by = wflow_id) |>
   select(wflow_id, mean, std_err) |>
+  mutate(recipe = c("recipe 1", "recipe 2", "recipe 3", "recipe 4")) |> 
   arrange(mean)
+
+save(models_table, file = here("08_attempt/results/models_table.rda"))
 
 model_results |>
   autoplot(metric = "mae")
@@ -36,3 +39,6 @@ model_results |>
 model_results |>
   autoplot(metric = "mae", select_best = TRUE)
 
+select_best(bt_tune_4, metric = "mae") 
+
+save(bt_autoplot, file = here("12_attempt/results/bt_autoplot.rda"))

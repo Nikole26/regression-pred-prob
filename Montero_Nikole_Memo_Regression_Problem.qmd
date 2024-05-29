@@ -1,0 +1,168 @@
+---
+title: "Regression Problem Memo"
+subtitle: |
+  | Prediction Problems 
+  | Data Science 3 with R (STAT 301-3)
+author: "Nikole Montero Cervantes"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-3-2024-spring/regression-pred-prob-Nikole26.git](https://github.com/stat301-3-2024-spring/regression-pred-prob-Nikole26.git)
+
+:::
+
+
+```{r}
+#| label: loading-packages-and-data
+#| echo: false
+library(tidyverse)
+library(here)
+library(gt)
+library(gtExtras)
+```
+
+# Introduction
+The objective of this project is to develop a predictive model to determine the likelihood price based on features such as number of beds, location, and others, in the Airbnb dataset. This is a regression problem, with the target variable being `price`. The dataset was sourced from Kaggle, and this report aims to present key insights when developing the two models submissions selected. 
+
+# Models/Submissions Assesment
+
+## Boost Tree Model (Attempt 8)
+In my eighth submission, both the model and recipe were redefined. From my previous attempts, I noticed that the best-performing models were random forest and boosted tree. Thus, for computational reasons, I decided to focus on the boosted tree model. Within this model, I narrowed the focus to the engine `lightgbm` since it performed very well and required less time to run than the random forest. With that in mind, in this attempt, I then focused on trying different preprocessing steps in my recipes. 
+
+```{r}
+#| label: fig-results-attempt-8
+#| fig-cap: Boost Tree Model' Results using different recipes 
+#| echo: false
+load(here("08_attempt/results/models_table.rda"))
+models_table |>
+  knitr::kable()
+```
+
+As shown in @fig-results-attempt-8, among the four recipes tried with the boosted tree model, recipe 4 performed the best, with an MAE of 0.1116576 and when predicting on new data in Kaggle the MAE was 45.57132. 
+
+### How did I achieve the best performance for my Boosted Tree model?
+
+#### Strenght my recipe 
+
+This improvement is mainly because of the complexity of my recipe that I used, particularly the imputation methods. 
+
+1. Removing Unnecessary Variables: Variables such as `id`, `host_response_time`, `host_verifications`, `first_review_year`, and `last_review_year` were removed because some of them were character variables that might not have a substantial impact on predicting the target variable and could introduce noise. 
+
+2. Mean Imputation for Numeric Predictors: Missing values in numeric predictors were imputed using the mean value of each predictor.
+
+3. Mode Imputation for Nominal Predictors: Missing values in nominal predictors were imputed using the most frequent value (mode) of each predictor.
+
+4. K-Nearest Neighbors (KNN) Imputation: Applied KNN imputation to all predictors, leveraging the values of the nearest neighbors to fill in any missing data.
+
+5. One-Hot Encoding for Nominal Predictors: Converted nominal predictors into one-hot encoded variables, representing each category as a separate binary variable.
+
+6. Near-Zero Variance Filter: Removed predictors with near-zero variance to reduce noise and improve model performance.
+
+7. Normalization for Numeric Predictors: Normalized numeric predictors to have a mean of zero and a standard deviation of one, ensuring that they are on a comparable scale.
+
+### Engine Selection for Boost Tree
+
+This improvement was also achieved by using a better preprocessing recipe and switching to the `lightgbm`engine, whereas xgboost was used in previous attempts. 
+
+Switching to `lightgbm` offered several advantages:
+
+* Speed and Efficiency: It is made to be faster and more effective, utilizing methods like decision tree learning based on histograms to simplify and expedite the training process.
+
+* Scalability: It can process huge datasets more effectively, which makes it appropriate for real-world applications with substantial data volumes and high-dimensional characteristics.
+
+* Accuracy: Because of its sophisticated optimization methods and capacity to properly manage overfitting, it frequently produces results with higher accuracy. It makes use of Leaf-wise (Best-first) tree growth, which can result in more precise and profound trees. 
+
+### Hyperparameters
+
+In this attempt, I continually refined the parameter ranges by selecting the best hyperparameters and plotting them based on the improvements observed in my previous attempts.
+
+## Ensemble Model (Attemp 12)
+
+In this attempt, an ensemble model was produced. Since I developed a strong recipe and refined my models and their tunings, an ensemble would potentially enhance and increase performance on unseen data. Three distinct model types were used to build the ensemble model: a support vector machine (SVM) model, a K-Nearest Neighbors (KNN) model, a linear regression model, and Boost Tree model (BT). Every model type specified the structure for possible candidate members, who were then fitted and fine-tuned on a dataset stratified by the target variable and divided using 3-repetition 5-fold cross-validation. This resulted on an MAE of 44.05756 on unseen data. 
+
+### How do I got to this model improvement?
+
+### Sronger Recipe
+
+The recipe used for the ensemble model builds upon the steps from the previous recipe but includes additional preprocessing steps to strengthen the model. Compared to the previous recipe, this new recipe introduces several new preprocessing steps to enhance the robustness and performance of the model. These differences are outlined below:
+
+1. Removing Unnecessary Variables: Variables such as `id`, `host_verifications`, and `host_response_time` were removed to exclude potentially irrelevant features and character variables that may introduce noise into the model. I chose to retain `first_review_year` and `last_review_year`, as they could provide valuable information. For instance, properties with longer histories may have accumulated more reputation, which could influence the price.
+
+2. Collapsing Rare Levels: Collapsed infrequent levels of nominal predictors into a single "other" category if they fall below a specified threshold (5%). This helps to simplify the model and prevent overfitting by reducing the number of distinct categories.
+
+3. Handling Novel Levels: This step is added to handle any new levels in categorical variables that were not seen during training, ensuring the model can generalize well to unseen categories during prediction.
+
+4. Handling Unknown Levels: This step is introduced to replace missing values in nominal predictors with a new "unknown" category, effectively managing missing data.
+
+### Using an Ensemble Model with Stacking
+
+I decided to apply an ensemble model, since I already had found my strength model and recipe and was looking for other option to improve efficiency and meet the MAE benchmark. The main reason behind mt thinking process of the using an ensemble model are explained beloved: 
+
+1. Leveraging Diverse Model Strengths:
+
+* Support Vector Machine (SVM): Effective for capturing complex relationships and boundaries between features.
+
+* K-Nearest Neighbors (KNN): Good for capturing local data structure and relationships.
+
+* Linear Regression: Provides a simple and interpretable model that can capture linear trends.
+
+* Boosted Tree (BT): Excels in capturing non-linear patterns and interactions between features. It is important to know that after many attempts on redefined my Boosted Tree I was confident on my redefined parameters and the use of the engine `lightgbm` to ensure an efficient performance. 
+
+By combining these models, we leverage their individual strengths, thus improving the overall predictive performance.
+
+2. Improved Predictive Accuracy:
+
+Stacking enables the combination of distinct viewpoints that each model type offers to the prediction task in order to produce forecasts that are more accurate. Because it reduces bias and variation, the ensemble model usually performs better than individual models.
+
+3. Reduced Overfitting:
+
+Ensemble methods like stacking can reduce the risk of overfitting, which is particularly beneficial when dealing with the Airbnb dataset. By blending multiple models, the ensemble can generalize better to unseen data, improving performance on the test set.
+
+4. Robustness to Data Variability:
+
+The Airbnb dataset contains variability and noise due to diverse factors influencing the price. Stacking helps mitigate the impact of this variability by averaging out the errors of individual models.
+
+5. Ensemble Model Development Process:
+
+Finally, I ensure that three main parts were developed efficiently in order to ensure that the ensemble is set to better results. 
+
+* Strong Recipe and Model Tuning: Before building the ensemble, each model type was carefully developed and fine-tuned. This involved creating a robust preprocessing pipeline (recipe), as explained before, and optimizing hyperparameters to ensure each base model performed well on its own.
+
+* Stratified Cross-Validation: The dataset was stratified by the target variable and split using 3-repetition 5-fold cross-validation. This ensured that each model was trained and validated on diverse subsets of the data, providing a thorough evaluation of their performance.
+
+* Fine-Tuning and Candidate Selection: Possible candidate models were fitted and fine-tuned during the cross-validation process. Only the best-performing versions of each model type were included in the final ensemble.
+
+* Stacking and Penalty Tuning: EA meta-model (stacker), was used to aggregate the predictions from each model by learning how to appropriately weigh each prediction from its component models. In order to maximize performance metrics and balance the number of models in the ensemble, the penalty parameter was adjusted. This meta-model, which emphasizes the advantages of each underlying model, increased the forecast accuracy even further.
+
+To illustrate the effectiveness of the stacking ensemble, the following plot shows the stacking coefficients for the models used in the ensemble:
+
+```{r}
+#| label: fig-coef-attempt-12
+#| fig-cap: Models and Weights plot 
+#| echo: false
+load(here("12_attempt/results/coefficient_plot.rda"))
+coefficient_plot
+```
+
+In @fig-coef-attempt-12 each bar represents the stacking coefficient for a member of the ensemble, indicating the weight given to each model in the final prediction. The boost_tree model, shown in red, has the highest coefficients, which is not surprising, considering the high redifend process it has undergone through all my previous attempts. The `nearest_neighbor` (green) and `svm_rbf` (blue) models also contribute, albeit to a lesser extent, demonstrating how the ensemble leverages multiple models to achieve better performance.
+
+## Conclusion
+
+In this assignment, I developed a predictive model to determine Airbnb prices using a combination of features such as number of beds and location. Initially, I optimized a Boosted Tree model with the `lightgbm` engine, achieving strong results with an MAE of 45.57132 on unseen data. To further enhance performance, I implemented an ensemble model using stacking, which combined the strengths of Support Vector Machine (SVM), K-Nearest Neighbors (KNN), Linear Regression, and Boosted Tree models. This ensemble approach reduced overfitting, improved predictive accuracy, and increased robustness to data variability, resulting in a superior MAE of 44.05756 on unseen data. The success of the ensemble model highlights the effectiveness of leveraging diverse model strengths and meticulous hyperparameter tuning, supported by a comprehensive preprocessing strategy.

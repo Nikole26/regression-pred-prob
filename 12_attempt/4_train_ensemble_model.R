@@ -78,14 +78,3 @@ all_members <- bind_rows(
   bt_members
 ) |>
   arrange(desc(coef))
-
-# trained ensemble model
-trained_model <- air__test |>
-  bind_cols(predict(air_bnb_final, wildfires_test, members = TRUE)) |>
-  rename(ensemble = .pred)
-
-# predictions
-preds <- wildfires_test |>
-  select(burned) |>
-  bind_cols(predict(wildfires_final, wildfires_test, members = TRUE)) |>
-  rename(ensemble = .pred)
