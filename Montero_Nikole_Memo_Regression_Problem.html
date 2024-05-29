@@ -2997,18 +2997,14 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#boost-tree-model-attempt-8" id="toc-boost-tree-model-attempt-8" class="nav-link" data-scroll-target="#boost-tree-model-attempt-8">Boost Tree Model (Attempt 8)</a>
   <ul class="collapse">
-  <li><a href="#how-did-i-achieve-that-improved-performance-in-my-boosted-tree-model" id="toc-how-did-i-achieve-that-improved-performance-in-my-boosted-tree-model" class="nav-link" data-scroll-target="#how-did-i-achieve-that-improved-performance-in-my-boosted-tree-model">How did I achieve that improved performance in my Boosted Tree model?</a></li>
-  <li><a href="#engine-selection-for-boost-tree" id="toc-engine-selection-for-boost-tree" class="nav-link" data-scroll-target="#engine-selection-for-boost-tree">Engine Selection for Boost Tree</a></li>
-  <li><a href="#hyperparameters" id="toc-hyperparameters" class="nav-link" data-scroll-target="#hyperparameters">Hyperparameters</a></li>
+  <li><a href="#how-did-i-achieve-that-better-performance-in-my-boosted-tree-model" id="toc-how-did-i-achieve-that-better-performance-in-my-boosted-tree-model" class="nav-link" data-scroll-target="#how-did-i-achieve-that-better-performance-in-my-boosted-tree-model">How did I achieve that better performance in my Boosted Tree model?</a></li>
   </ul></li>
   <li><a href="#ensemble-model-attemp-12" id="toc-ensemble-model-attemp-12" class="nav-link" data-scroll-target="#ensemble-model-attemp-12">Ensemble Model (Attemp 12)</a>
   <ul class="collapse">
-  <li><a href="#how-did-i-get-to-this-model-improvement" id="toc-how-did-i-get-to-this-model-improvement" class="nav-link" data-scroll-target="#how-did-i-get-to-this-model-improvement">How did I get to this model improvement?</a></li>
-  <li><a href="#stronger-recipe" id="toc-stronger-recipe" class="nav-link" data-scroll-target="#stronger-recipe">Stronger Recipe</a></li>
-  <li><a href="#using-an-ensemble-model-with-stacking" id="toc-using-an-ensemble-model-with-stacking" class="nav-link" data-scroll-target="#using-an-ensemble-model-with-stacking">Using an Ensemble Model with Stacking</a></li>
+  <li><a href="#how-did-i-achieve-this-improvement-in-my-models-performance" id="toc-how-did-i-achieve-this-improvement-in-my-models-performance" class="nav-link" data-scroll-target="#how-did-i-achieve-this-improvement-in-my-models-performance">How did I achieve this improvement in my models’ performance?</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  </ul></li>
   </ul>
 </nav>
 </div>
@@ -3124,10 +3120,10 @@ Github Repo Link
 </div>
 </div>
 <p>As shown in <a href="#fig-results-attempt-8">Figure 1</a>, among the four recipes tried with the boosted tree model, recipe 4 performed the best, with an MAE of 0.1116576 and when predicting on new data in Kaggle the MAE was 45.57132.</p>
-<section id="how-did-i-achieve-that-improved-performance-in-my-boosted-tree-model" class="level3">
-<h3 class="anchored" data-anchor-id="how-did-i-achieve-that-improved-performance-in-my-boosted-tree-model">How did I achieve that improved performance in my Boosted Tree model?</h3>
-<section id="strenght-my-recipe" class="level4">
-<h4 class="anchored" data-anchor-id="strenght-my-recipe">Strenght my recipe</h4>
+<section id="how-did-i-achieve-that-better-performance-in-my-boosted-tree-model" class="level3">
+<h3 class="anchored" data-anchor-id="how-did-i-achieve-that-better-performance-in-my-boosted-tree-model">How did I achieve that better performance in my Boosted Tree model?</h3>
+<section id="recipe-complexity" class="level4">
+<h4 class="anchored" data-anchor-id="recipe-complexity">Recipe Complexity</h4>
 <p>This improvement is mainly because of the complexity of my recipe that I used, particularly the imputation methods.</p>
 <ol type="1">
 <li><p>Removing Unnecessary Variables: Variables such as <code>id</code>, <code>host_response_time</code>, <code>host_verifications</code>, <code>first_review_year</code>, and <code>last_review_year</code> were removed because some of them were character variables, and all of them might not have a substantial impact on predicting the target variable and could introduce noise.</p></li>
@@ -3139,9 +3135,8 @@ Github Repo Link
 <li><p>Normalization for Numeric Predictors: Normalized numeric predictors to have a mean of zero and a standard deviation of one, ensuring that they are on a comparable scale.</p></li>
 </ol>
 </section>
-</section>
-<section id="engine-selection-for-boost-tree" class="level3">
-<h3 class="anchored" data-anchor-id="engine-selection-for-boost-tree">Engine Selection for Boost Tree</h3>
+<section id="engine-selection-for-boost-tree" class="level4">
+<h4 class="anchored" data-anchor-id="engine-selection-for-boost-tree">Engine Selection for Boost Tree</h4>
 <p>This improvement was also achieved by using a better preprocessing recipe and switching to the <code>lightgbm</code>engine, whereas xgboost was used in previous attempts.</p>
 <p>Switching to <code>lightgbm</code> offered several advantages:</p>
 <ul>
@@ -3150,19 +3145,19 @@ Github Repo Link
 <li><p>Accuracy: Because of its sophisticated optimization methods and capacity to properly manage overfitting, it frequently produces results with higher accuracy. It makes use of Leaf-wise (Best-first) tree growth, which can result in more precise and profound trees.</p></li>
 </ul>
 </section>
-<section id="hyperparameters" class="level3">
-<h3 class="anchored" data-anchor-id="hyperparameters">Hyperparameters</h3>
+<section id="hyperparameters" class="level4">
+<h4 class="anchored" data-anchor-id="hyperparameters">Hyperparameters</h4>
 <p>In this attempt, I continually refined the parameter ranges by selecting the best hyperparameters and plotting them based on the improvements observed in my previous attempts.</p>
+</section>
 </section>
 </section>
 <section id="ensemble-model-attemp-12" class="level2">
 <h2 class="anchored" data-anchor-id="ensemble-model-attemp-12">Ensemble Model (Attemp 12)</h2>
 <p>In this attempt, an ensemble model was produced. Since I developed a strong recipe and refined my models and their tunings, an ensemble would potentially enhance and increase performance on unseen data. Three distinct model types were used to build the ensemble model: a support vector machine (SVM) model, a K-Nearest Neighbors (KNN) model, a linear regression model, and Boost Tree model (BT). Every model type specified the structure for possible candidate members, who were then fitted and fine-tuned on a dataset stratified by the target variable and divided using 3-repetition 5-fold cross-validation. This resulted on an MAE of 44.05756 on unseen data.</p>
-<section id="how-did-i-get-to-this-model-improvement" class="level3">
-<h3 class="anchored" data-anchor-id="how-did-i-get-to-this-model-improvement">How did I get to this model improvement?</h3>
-</section>
-<section id="stronger-recipe" class="level3">
-<h3 class="anchored" data-anchor-id="stronger-recipe">Stronger Recipe</h3>
+<section id="how-did-i-achieve-this-improvement-in-my-models-performance" class="level3">
+<h3 class="anchored" data-anchor-id="how-did-i-achieve-this-improvement-in-my-models-performance">How did I achieve this improvement in my models’ performance?</h3>
+<section id="recipe-complexity-1" class="level4">
+<h4 class="anchored" data-anchor-id="recipe-complexity-1">Recipe Complexity</h4>
 <p>The recipe used for the ensemble model builds upon the steps from the previous recipe but includes additional preprocessing steps to strengthen the model. Compared to the previous recipe, this new recipe introduces several new preprocessing steps to enhance the robustness and performance of the model. These differences are outlined below:</p>
 <ol type="1">
 <li><p>Removing Unnecessary Variables: Variables such as <code>id</code>, <code>host_verifications</code>, and <code>host_response_time</code> were removed to exclude potentially irrelevant features and character variables that may introduce noise into the model. I chose to retain <code>first_review_year</code> and <code>last_review_year</code>, as they could provide valuable information. For instance, properties with longer histories may have accumulated more reputation, which could influence the price.</p></li>
@@ -3171,8 +3166,8 @@ Github Repo Link
 <li><p>Handling Unknown Levels: This step is introduced to replace missing values in nominal predictors with a new “unknown” category, effectively managing missing data.</p></li>
 </ol>
 </section>
-<section id="using-an-ensemble-model-with-stacking" class="level3">
-<h3 class="anchored" data-anchor-id="using-an-ensemble-model-with-stacking">Using an Ensemble Model with Stacking</h3>
+<section id="using-an-ensemble-model-with-stacking" class="level4">
+<h4 class="anchored" data-anchor-id="using-an-ensemble-model-with-stacking">Using an Ensemble Model with Stacking</h4>
 <p>I decided to apply an ensemble model, since I already had found my strength model and recipe and was looking for other option to improve efficiency and meet the MAE benchmark. The main reason behind mt thinking process of the using an ensemble model are explained beloved:</p>
 <ol type="1">
 <li>Leveraging Diverse Model Strengths:</li>
@@ -3220,10 +3215,11 @@ Github Repo Link
 <p>In <a href="#fig-coef-attempt-12">Figure 2</a> each bar represents the stacking coefficient for a member of the ensemble, indicating the weight given to each model in the final prediction. The <code>boost_tree</code> model, shown in red, has the highest coefficients, which is not surprising, considering the high redefined process it has undergone through all my previous attempts. The <code>nearest_neighbor</code> (green) and <code>svm_rbf</code> (blue) models also contribute, albeit to a lesser extent, demonstrating how the ensemble leverages multiple models to achieve better performance.</p>
 </section>
 </section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-<p>In this assignment, I developed a predictive model to determine Airbnb prices using a combination of features such as number of beds and location. Initially, I optimized a Boosted Tree model with the <code>lightgbm</code> engine, achieving strong results with an MAE of 45.57132 on unseen data. To further enhance performance, I implemented an ensemble model using stacking, which combined the strengths of Support Vector Machine (SVM), K-Nearest Neighbors (KNN), Linear Regression, and Boosted Tree models. This ensemble approach reduced overfitting, improved predictive accuracy, and increased robustness to data variability, resulting in a superior MAE of 44.05756 on unseen data. The success of the ensemble model highlights the effectiveness of leveraging diverse model strengths and meticulous hyperparameter tuning, supported by a comprehensive preprocessing strategy.</p>
 </section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>In this assignment, I developed a predictive model to determine Airbnb prices using a combination of features such as number of beds and location. Initially, I optimized a Boosted Tree model with the <code>lightgbm</code> engine, achieving strong results with an MAE of 45.57132 on unseen data. To further enhance performance, I implemented an ensemble model using stacking, which combined the strengths of Support Vector Machine (SVM), K-Nearest Neighbors (KNN), Linear Regression, and Boosted Tree models. This ensemble approach reduced overfitting, improved predictive accuracy, and increased robustness to data variability, resulting in a superior MAE of 44.05756 on unseen data. The success of the ensemble model highlights the effectiveness of leveraging diverse model strengths and meticulous hyperparameter tuning, supported by a comprehensive preprocessing strategy.</p>
 </section>
 
 </main>
