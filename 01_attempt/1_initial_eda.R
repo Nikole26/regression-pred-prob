@@ -6,14 +6,21 @@ library(tidyverse)
 library(here)
 
 # Load data
-load(here("data/training_data.rda"))
-load(here("data/testing_data.rda"))
+load(here("01_attempt/data/training_data.rda"))
+load(here("01_attempt/data/testing_data.rda"))
 
+# Exploring data-----
 skimr::skim_without_charts(training_data)
 
-# Target variable distribution
-ggplot(data = your_data, aes(y = price)) +
-  geom_boxplot() +
+# Target variable distribution --------
+ggplot(data = training_data, aes(x = 10^(log_price))) +
+  geom_histogram() +
+  ylab("Price") +
+  ggtitle("Box Plot of Price Distribution")
+
+## With log applied
+ggplot(data = training_data, aes(x = log_price)) +
+  geom_histogram() +
   ylab("Price") +
   ggtitle("Box Plot of Price Distribution")
 
