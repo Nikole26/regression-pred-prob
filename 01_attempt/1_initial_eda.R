@@ -11,8 +11,6 @@ load(here("data/testing_data.rda"))
 
 skimr::skim_without_charts(training_data)
 
-# 
-
 # Target variable distribution
 ggplot(data = your_data, aes(y = price)) +
   geom_boxplot() +

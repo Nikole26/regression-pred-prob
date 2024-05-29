@@ -41,10 +41,29 @@ library(gtExtras)
 # Introduction
 The objective of this project is to develop a predictive model to determine the likelihood price based on features such as number of beds, location, and others, in the Airbnb dataset. This is a regression problem, with the target variable being `price`. The dataset was sourced from Kaggle, and this report aims to present key insights when developing the two models submissions selected. 
 
+# Cleaning process and set up
+
+Before diving into the analysis of the two selected models, it is important to note that the dataset underwent a thorough cleaning process. This process involved:
+
+* Converting categorical variables into factor variables to facilitate modeling.
+
+* Managing numerical data, including converting percentage strings  into numeric format and a character variable was parsed to extract numerical information.
+
+* Preprocessing of the price variable, which involved removing symbols such as "$" and "," and converting it into numeric format. Additionally, a `log_price` variable was created by taking the base 10 logarithm of price, aiming to reduce price distribution skewness in order to make the assumption of normalcy easier to make and improve the efficiency of machine learning or statistical analysis.
+
+* Handling logical variables by converting them into factors with appropriate levels
+
+* Managing date variables by extracting relevant information, such as the year.
+
+Additionally, redundant or unnecessary variables, including `bathrooms_text`, `host_neighbourhood`, `host_since`, `last_review`, `first_review`, `host_location`,  were removed from both the training and testing datasets to smooth the analysis.
+
+Finally, I decided to use a stratified k-fold cross-validation with 5 folds and 5 repeats. The target variable, which is `log_price`, was utilized to ensure that each fold maintains the same class distribution as the original dataset. This approach allows for robust evaluation of model performance while accounting for the distribution of the target variable.
+
 # Models/Submissions Assesment
 
 ## Boost Tree Model (Attempt 8)
-In my eighth submission, both the model and recipe were redefined. From my previous attempts, I noticed that the best-performing models were random forest and boosted tree. Thus, for computational reasons, I decided to focus on the boosted tree model. Within this model, I narrowed the focus to the engine `lightgbm` since it performed very well and required less time to run than the random forest. With that in mind, in this attempt, I then focused on trying different preprocessing steps in my recipes. 
+
+In my eighth submission, both the model and recipe were redefined. From my previous attempts, I noticed that the best-performing models were random forest and boosted tree. Thus, for computational reasons, I decided to focus on the boosted tree model since it performed very well and required less time to run than the random forest. With that in mind, in this attempt, I then focused on trying different preprocessing steps in my recipes. 
 
 ```{r}
 #| label: fig-results-attempt-8
@@ -57,13 +76,13 @@ models_table |>
 
 As shown in @fig-results-attempt-8, among the four recipes tried with the boosted tree model, recipe 4 performed the best, with an MAE of 0.1116576 and when predicting on new data in Kaggle the MAE was 45.57132. 
 
-### How did I achieve the best performance for my Boosted Tree model?
+### How did I achieve that improved performance in my Boosted Tree model?
 
 #### Strenght my recipe 
 
 This improvement is mainly because of the complexity of my recipe that I used, particularly the imputation methods. 
 
-1. Removing Unnecessary Variables: Variables such as `id`, `host_response_time`, `host_verifications`, `first_review_year`, and `last_review_year` were removed because some of them were character variables that might not have a substantial impact on predicting the target variable and could introduce noise. 
+1. Removing Unnecessary Variables: Variables such as `id`, `host_response_time`, `host_verifications`, `first_review_year`, and `last_review_year` were removed because some of them were character variables, and all of them might not have a substantial impact on predicting the target variable and could introduce noise. 
 
 2. Mean Imputation for Numeric Predictors: Missing values in numeric predictors were imputed using the mean value of each predictor.
 
@@ -95,11 +114,11 @@ In this attempt, I continually refined the parameter ranges by selecting the bes
 
 ## Ensemble Model (Attemp 12)
 
-In this attempt, an ensemble model was produced. Since I developed a strong recipe and refined my models and their tunings, an ensemble would potentially enhance and increase performance on unseen data. Three distinct model types were used to build the ensemble model: a support vector machine (SVM) model, a K-Nearest Neighbors (KNN) model, a linear regression model, and Boost Tree model (BT). Every model type specified the structure for possible candidate members, who were then fitted and fine-tuned on a dataset stratified by the target variable and divided using 3-repetition 5-fold cross-validation. This resulted on an MAE of 44.05756 on unseen data. 
+In this attempt, an ensemble model was produced. Since I developed a strong recipe and refined my models and their tunings, an ensemble would potentially enhance and increase performance on unseen data. Three distinct model types were used to build the ensemble model: a support vector machine (SVM) model, a K-Nearest Neighbors (KNN) model, a linear regression model, and Boost Tree model (BT). Every model type specified the structure for possible candidate members, who were then fitted and fine-tuned on a dataset stratified by the target variable and divided using 3-repetition 5-fold cross-validation. This resulted on an MAE of 44.05756 on unseen data.
 
-### How do I got to this model improvement?
+### How did I get to this model improvement?
 
-### Sronger Recipe
+### Stronger Recipe
 
 The recipe used for the ensemble model builds upon the steps from the previous recipe but includes additional preprocessing steps to strengthen the model. Compared to the previous recipe, this new recipe introduces several new preprocessing steps to enhance the robustness and performance of the model. These differences are outlined below:
 
@@ -161,7 +180,7 @@ load(here("12_attempt/results/coefficient_plot.rda"))
 coefficient_plot
 ```
 
-In @fig-coef-attempt-12 each bar represents the stacking coefficient for a member of the ensemble, indicating the weight given to each model in the final prediction. The boost_tree model, shown in red, has the highest coefficients, which is not surprising, considering the high redifend process it has undergone through all my previous attempts. The `nearest_neighbor` (green) and `svm_rbf` (blue) models also contribute, albeit to a lesser extent, demonstrating how the ensemble leverages multiple models to achieve better performance.
+In @fig-coef-attempt-12 each bar represents the stacking coefficient for a member of the ensemble, indicating the weight given to each model in the final prediction. The `boost_tree` model, shown in red, has the highest coefficients, which is not surprising, considering the high redefined process it has undergone through all my previous attempts. The `nearest_neighbor` (green) and `svm_rbf` (blue) models also contribute, albeit to a lesser extent, demonstrating how the ensemble leverages multiple models to achieve better performance.
 
 ## Conclusion
 
