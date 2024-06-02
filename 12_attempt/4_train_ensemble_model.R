@@ -1,4 +1,4 @@
-# L07 Ensemble Models ----
+# Regression Problem ----
 # Train & explore ensemble model
 
 # Load package(s) ----

@@ -1,4 +1,4 @@
-# L07 Ensemble Models ----
+# Regression Problem ----
 # Tune KNN model
 
 # Load package(s) ----

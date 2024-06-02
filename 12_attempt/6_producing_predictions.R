@@ -1,4 +1,4 @@
-# Final Project ----
+# Regression Problem ----
 # Assessing final model
 
 # load packages ----
